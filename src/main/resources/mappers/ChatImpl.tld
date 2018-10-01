@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="dao.UserDao">
+    <resultMap id="UserAllMap" type="User">
+        <id column="user_id" property="id"/>
+        <result column="username" property="userName"/>
+        <result column="password" property="password"/>
+        <result column="register_date" property="registerDate"/>
+    </resultMap>
+
+
+    <select id="getUser" parameterType="Integer" resultMap="UserAllMap">
+        SELECT * FROM t_user WHERE user_id=#{userID}
+    </select>
+
+    <select id="getUserByName" parameterType="String" resultMap="UserAllMap">
+        SELECT * FROM t_user WHERE username=#{userName}
+    </select>
+
+    <select id="userLogin" parameterType="domain.User" resultType="int">
+      SELECT count(*) FROM t_user WHERE username =#{userName} AND password = #{password}
+    </select>
+
+    <insert id="userRegister" parameterType="domain.User">
+      INSERT INTO t_user(username,password,register_date) VALUES (#{userName},#{password},#{registerDate})
+    </insert>
+
+</mapper>
