@@ -5,12 +5,22 @@
   Time: 12:24
   To change this template use File | Settings | File Templates.
 --%>
+<!--
+* 客户端连接服务端websocket
+* 并且订阅一系列频道，用来接收不同种类的消息
+* /app/chat/participants ：当前在线人数的消息，只会接收一次
+* /topic/login ： 新登录用户的消息
+* /topic/chat/message ： 聊天内容消息
+* /topic/logout : 用户离线的消息
+* 服务器发回json实例 {"userName":"chris","sendDate":1494664021793,"content":"hello"}
+-->
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <title>Start chatting now</title>
 </head>
 <link rel="stylesheet" href="static/css/bootstrap.min.css" type="text/css">
+<link rel="stylesheet" href="static/css/chat.css" type="text/css">
 <script src="static/js/jquery.min.js"></script>
 <script src="static/js/bootstrap.min.js" type="text/javascript"></script>
 <body>
@@ -21,7 +31,7 @@
         <h1 id="title">chat-room</h1></div>
     <div class="middle">
         <div id="menu">
-            <b>在线人数</b>
+            <b>在线人数<span>0</span></b>
             <br>在线用户<br>
         </div>
 
@@ -32,10 +42,10 @@
     </div>
 
 
-        <div id="content">
+    <div id="content">
         <textarea class="form-control" rows="3" placeholder="我想说.....">
         </textarea>
-        </div>
+    </div>
 
     <div style="background-color: #F8F8F8;">
         <div id="buttons">
@@ -51,71 +61,39 @@
 
 </div>
 </body>
-<style>
-    html, body {
-        width: 100%;
-        height: 100%;
-    }
+<script>
+    var wsServer = null;
+    wsServer = "ws://" + location.host+"${pageContext.request.contextPath}" + "/socket";
 
-    #container {
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-        margin-left: 30%;
-        margin-right: 30%;
-        margin-top: 100px;
-        margin-bottom: 200px;
-        background-color: rgba(240, 255, 255, 0.5);
-        width: 30%;
-    }
+    $(function () {
+        var websocket = new WebSocket(wsServer);
+        websocket.onopen = function (evnt) {
+            $("#tou").html("链接服务器成功!")
+        };
+        websocket.onmessage = function (evnt) {
+            $("#msg").html($("#msg").html() + "<br/>" + evnt.data);
+        };
+        websocket.onerror = function (evnt) {
+            $("#tou").html("发生错误，与服务器断开了链接!")
+        };
+        websocket.onclose = function (evnt) {
+            $("#tou").html("与服务器断开了链接!")
+        }
+        $('#send').bind('click', function () {
+            send();
+        });
 
-    #header {
-        background-color: #585858;
-    }
+        function send() {
+            if (websocket != null) {
+                var message = document.getElementById('message').value;
+                websocket.send(message);
+            } else {
+                alert('未与服务器链接.');
+            }
+        }
+    });
 
-    #title {
-        color: #FFFFFF;
-        margin-bottom: 0;
-    }
 
-    .middle {
-        width: 500px;
-        height: 400px;
-    }
+</script>
 
-    #menu {
-        background-color: #989898;
-        color: #FFFFFF;
-        height: 400px;
-        width: 100px;
-        float: left;
-    }
-
-    #chatter {
-
-        background-color: hsl(90, 100%, 85%);
-        color: #000000;
-        height: 400px;
-        width: 400px;
-        float: left;
-    }
-
-    #content {
-        background-color: #F8F8F8;
-        clear: both;
-        height: 200px;
-        width: 500px;
-    }
-
-    #footer {
-        background-color: #585858;
-        text-align: center;
-        color: #FFFFFF;
-        /*height: 50px;*/
-        /*width: 500px;*/
-    }
-   #buttons{
-       background-color: #989898;
-   }
-</style>
 </html>
