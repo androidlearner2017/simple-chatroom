@@ -16,6 +16,7 @@
         http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
 
 	<mvc:annotation-driven/>
+	<!-- 要求springmvc可以处理静态资源-->
 	<mvc:resources mapping="/static/**" location="/static/"/>
 	<!-- 将springmvc不能处理的请求交给tomcat,酱紫动态静态都能访问成功 -->
 	<mvc:default-servlet-handler/>

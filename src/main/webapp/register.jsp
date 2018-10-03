@@ -41,7 +41,7 @@
 </head>
 <body>
 <div class="container">
-    <form action="<%=path%>/user/register.do" method="post" name="registerForm"
+    <form action="user/register.do" method="post" name="registerForm"
           onsubmit="return validateForm()">
 
         <div class="form-group col-sm-4" style="width:70%">

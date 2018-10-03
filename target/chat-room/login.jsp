@@ -38,7 +38,7 @@
 <body>
 
 <div class="container">
-    <form action="<%=path%>/user/login.do" method="post" name="loginForm"
+    <form action="user/login.do" method="post" name="loginForm"
           onsubmit="return validateForm()">
         <div class="form-group col-sm-8">
             <label for="user">用户名</label>

@@ -25,7 +25,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry webSocketHandlerRegistry) {
         //添加websocket处理器，添加握手拦截器
-        webSocketHandlerRegistry.addHandler(handler, "/websocket").addInterceptors(new MyHandShakeInterceptor());
+        webSocketHandlerRegistry.addHandler(handler, "/user/login.do").addInterceptors(new MyHandShakeInterceptor());
 
     }
 

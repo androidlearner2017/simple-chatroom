@@ -15,15 +15,17 @@
 * 服务器发回json实例 {"userName":"chris","sendDate":1494664021793,"content":"hello"}
 -->
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<% String path = request.getContextPath();%>
 <html>
 <head>
     <title>Start chatting now</title>
 </head>
-<link rel="stylesheet" href="static/css/bootstrap.min.css" type="text/css">
-<link rel="stylesheet" href="static/css/chat.css" type="text/css">
-<script src="static/js/sockjs.min.js"></script>
-<script src="static/js/jquery.min.js"></script>
-<script src="static/js/bootstrap.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="<%=path%>/static/css/bootstrap.min.css"
+      type="text/css">
+<link rel="stylesheet" href="<%=path%>/static/css/chat.css" type="text/css">
+<script src="<%=path%>/static/js/jquery.min.js"></script>
+<script src="<%=path%>/static/js/bootstrap.min.js"
+        type="text/javascript"></script>
 <body>
 
 <div id="container" style="width:500px">
@@ -34,7 +36,7 @@
         <div id="menu">
             <b>在线人数<span>0</span></b>
             <br>在线用户<br>
-            <p id="tou">欢迎来到聊天室，请先点击连接</p>
+            <p id="tou">欢迎来到聊天室</p>
         </div>
 
         <div class="chatter" id="chatter">
@@ -53,7 +55,9 @@
 
     <div style="background-color: #F8F8F8;">
         <div id="buttons">
-            <button type="button" class="btn btn-default">连接</button>
+            <button id="butSent" type="button" class="btn btn-default"
+                    onclick="getConnection()">连接
+            </button>
             <button type="button" class="btn btn-default">断开</button>
             <button type="button" class="btn btn-default">发送</button>
         </div>
@@ -68,27 +72,32 @@
 <script>
 
     var wsServer = null;
-    wsServer = "ws://" + location.host + " pageContext.request.contextPath}" + "/socket";
-
-    // 开启socket连接
-    $(function () {
-        var websocket = new WebSocket(wsServer);
-        websocket.onopen = function (evnt) {
-            $("#tou").html("链接服务器成功!")
-        };
-        websocket.onmessage = function (evnt) {
-            var msg = $("#msg");
-            msg.html(msg.html() + "<br/>" + evnt.data);
-        };
-        websocket.onerror = function (evnt) {
-            $("#tou").html("发生错误，与服务器断开了链接!")
-        };
-        websocket.onclose = function (evnt) {
-            $("#tou").html("与服务器断开了链接!")
-        };
-        $('#send').bind('click', function () {
-            send();
-        });
+    wsServer = "ws://" + location.host + "${pageContext.request.contextPath}" + "/user/login.do";
+    var websocket = null;
+        //打开链接
+        function getConnection() {
+            if (websocket == null) {
+                websocket = new WebSocket(wsServer);
+                websocket.onopen = function (evnt) {
+                    alert("链接服务器成功!")
+                };
+                websocket.onmessage = function (evnt) {
+                    var msg = $("#msg");
+                    msg.html(msg.html() + "<br/>" + evnt.data);
+                };
+                websocket.onerror = function (evnt) {
+                    alert("发生错误，与服务器断开了链接!")
+                };
+                websocket.onclose = function (evnt) {
+                    alert("与服务器断开了链接!")
+                };
+                $('#send').bind('click', function () {
+                    send();
+                });
+            } else {
+                alert("连接已存在!")
+            }
+        }
 
         function send() {
             if (websocket != null) {
@@ -98,7 +107,6 @@
                 alert('未与服务器链接.');
             }
         }
-    });
 
 
 </script>
