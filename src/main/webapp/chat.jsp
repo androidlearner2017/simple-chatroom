@@ -21,6 +21,7 @@
 </head>
 <link rel="stylesheet" href="static/css/bootstrap.min.css" type="text/css">
 <link rel="stylesheet" href="static/css/chat.css" type="text/css">
+<script src="static/js/sockjs.min.js"></script>
 <script src="static/js/jquery.min.js"></script>
 <script src="static/js/bootstrap.min.js" type="text/javascript"></script>
 <body>
@@ -33,17 +34,20 @@
         <div id="menu">
             <b>在线人数<span>0</span></b>
             <br>在线用户<br>
+            <p id="tou">欢迎来到聊天室，请先点击连接</p>
         </div>
 
         <div class="chatter" id="chatter">
-            <ul class="am-comments-list am-comments-list-flip" id="chat">
-            </ul>
+
+            <p id="msg"></p>
+
         </div>
     </div>
 
 
     <div id="content">
-        <textarea class="form-control" rows="3" placeholder="我想说.....">
+        <textarea class="form-control" rows="3" placeholder="我想说....."
+                  id="msgContent">
         </textarea>
     </div>
 
@@ -62,30 +66,33 @@
 </div>
 </body>
 <script>
-    var wsServer = null;
-    wsServer = "ws://" + location.host+"${pageContext.request.contextPath}" + "/socket";
 
+    var wsServer = null;
+    wsServer = "ws://" + location.host + " pageContext.request.contextPath}" + "/socket";
+
+    // 开启socket连接
     $(function () {
         var websocket = new WebSocket(wsServer);
         websocket.onopen = function (evnt) {
             $("#tou").html("链接服务器成功!")
         };
         websocket.onmessage = function (evnt) {
-            $("#msg").html($("#msg").html() + "<br/>" + evnt.data);
+            var msg = $("#msg");
+            msg.html(msg.html() + "<br/>" + evnt.data);
         };
         websocket.onerror = function (evnt) {
             $("#tou").html("发生错误，与服务器断开了链接!")
         };
         websocket.onclose = function (evnt) {
             $("#tou").html("与服务器断开了链接!")
-        }
+        };
         $('#send').bind('click', function () {
             send();
         });
 
         function send() {
             if (websocket != null) {
-                var message = document.getElementById('message').value;
+                var message = document.getElementById('msgContent').value;
                 websocket.send(message);
             } else {
                 alert('未与服务器链接.');

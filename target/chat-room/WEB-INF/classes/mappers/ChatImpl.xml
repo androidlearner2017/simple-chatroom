@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="dao.ChatDao">
+    <resultMap id="ChatAllMap" type="ChatMsg">
+        <id column="chat_id" property="id"/>
+        <result column="chat_user_id" property="chatUserId"/>
+        <result column="chat_date" property="chatDate"/>
+        <result column="chat_content" property="content"/>
+    </resultMap>
+
+
+    <select id="getUser" parameterType="Integer" resultMap="ChatAllMap">
+        SELECT * FROM t_chat WHERE chat_id=#{userID}
+    </select>
+
+    <insert id="addMsg" parameterType="domain.ChatMsg">
+      INSERT INTO t_chat(chat_user_id,chat_date,chat_content) VALUES (#{chatUserId},#{chatDate},#{content})
+    </insert>
+
+</mapper>

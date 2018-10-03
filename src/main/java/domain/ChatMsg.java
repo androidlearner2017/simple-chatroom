@@ -1,11 +1,13 @@
 package domain;
 
+import java.sql.Timestamp;
+
 public class ChatMsg {
 
     private int id;
     private int chatUserId;
-    private String chatDate;
-    private String Content;
+    private Timestamp chatDate;
+    private String content;
 
     public int getId() {
         return id;
@@ -23,19 +25,20 @@ public class ChatMsg {
         this.chatUserId = chatUserId;
     }
 
-    public String getChatDate() {
-        return chatDate;
-    }
-
-    public void setChatDate(String chatDate) {
-        this.chatDate = chatDate;
-    }
 
     public String getContent() {
-        return Content;
+        return content;
     }
 
     public void setContent(String content) {
-        Content = content;
+        content = content;
+    }
+
+    public Timestamp getChatDate() {
+        return chatDate;
+    }
+
+    public void setChatDate(Timestamp chatDate) {
+        this.chatDate = chatDate;
     }
 }

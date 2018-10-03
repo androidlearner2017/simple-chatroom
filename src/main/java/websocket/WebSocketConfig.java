@@ -1,29 +1,33 @@
 package websocket;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.messaging.simp.config.MessageBrokerRegistry;
-import org.springframework.web.socket.config.annotation.AbstractWebSocketMessageBrokerConfigurer;
-import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
-import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
-import org.springframework.web.socket.server.HandshakeInterceptor;
-import org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor;
-
+import org.springframework.web.socket.config.annotation.*;
+/**
+ * Component注解告诉SpringMVC该类是一个SpringIOC容器下管理的类
+ * 其实@Controller, @Service, @Repository是@Component的细化
+ * Since Spring 5 you just need to implement the interface WebMvcConfigurer:
+ *
+ * public class MvcConfig implements WebMvcConfigurer {
+ * This is because Java 8 introduced default methods on interfaces which
+ * cover the functionality of the  WebMvcConfigurerAdapter class
+ */
 @Configuration
 @EnableWebSocketMessageBroker
-public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
+public class WebSocketConfig implements WebSocketConfigurer {
     public WebSocketConfig() {
     }
 
-    public void registerStompEndpoints(StompEndpointRegistry stompEndpointRegistry) {
-        ////表示添加了一个/socket端点，客户端就可以通过这个端点来进行连接。withSockJS()的作用是开启SockJS支持.
-        stompEndpointRegistry.addEndpoint("/socket").withSockJS();
+    //Handeler要添加@Component这里才能autowired
+    @Autowired
+    ChatWebSocketHandler handler;
+
+    @Override
+    public void registerWebSocketHandlers(WebSocketHandlerRegistry webSocketHandlerRegistry) {
+        //添加websocket处理器，添加握手拦截器
+        webSocketHandlerRegistry.addHandler(handler, "/websocket").addInterceptors(new MyHandShakeInterceptor());
+
     }
 
-    public void configureMessageBroker(MessageBrokerRegistry registry) {
-        //指服务端接收地址的前缀，意思就是说客户端给服务端发消息的地址的前缀
-        registry.setApplicationDestinationPrefixes("/app");
-        //表示客户端订阅地址的前缀信息，也就是客户端接收服务端消息的地址的前缀信息
-        registry.enableSimpleBroker("/topic");
-    }
 }
 
