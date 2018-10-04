@@ -10,8 +10,12 @@
     </resultMap>
 
 
-    <select id="getUser" parameterType="Integer" resultMap="ChatAllMap">
-        SELECT * FROM t_chat WHERE chat_id=#{userID}
+    <select id="findMsg" parameterType="String" resultMap="ChatAllMap">
+        SELECT * FROM t_chat WHERE chat_content LIKE "%"#{conSearch}"%"
+    </select>
+
+    <select id="testMsg" parameterType="String" resultMap="ChatAllMap">
+        SELECT * FROM t_chat
     </select>
 
     <insert id="addMsg" parameterType="domain.ChatMsg">

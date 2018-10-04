@@ -62,6 +62,7 @@
             </button>
             <button type="button" class="btn btn-default" onclick="closeConnection()">断开</button>
             <button type="button" class="btn btn-default" onclick="sendMsg()">发送</button>
+            <button type="button" class="btn btn-default" onclick="location.href='http://localhost:8080/chatroom/chatHistory.jsp'">消息记录</button>
         </div>
     </div>
 

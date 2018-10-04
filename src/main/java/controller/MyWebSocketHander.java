@@ -7,6 +7,7 @@ import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.*;
 import service.ChatService;
+import service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -46,7 +47,11 @@ public class MyWebSocketHander implements WebSocketHandler {
         String message = "用户：" + user.getUserName() + "发送时间："+sentMsgSate +  "内容:"+ webSocketMessage.getPayload() + "";
         System.out.println(message);
         TextMessage toMsg = new TextMessage( message + "");
-        webSocketSession.sendMessage(toMsg);
+
+        //遍历所有的用户，发信息，这个要注意哦，要不然不能做到多人同时聊天
+        for(WebSocketSession wss : users) {
+            wss.sendMessage(toMsg);
+        }
     }
 
     @Override

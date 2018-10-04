@@ -31,7 +31,7 @@ public class ChatMsg {
     }
 
     public void setContent(String content) {
-        content = content;
+        this.content = content;
     }
 
     public String getChatDate() {
@@ -42,9 +42,29 @@ public class ChatMsg {
         this.chatDate = chatDate;
     }
 
+    public ChatMsg() {
+    }
+
+    public ChatMsg(int id, int chatUserId, String chatDate, String content) {
+        this.id = id;
+        this.chatUserId = chatUserId;
+        this.chatDate = chatDate;
+        this.content = content;
+    }
+
     public ChatMsg(int chatUserId, String chatDate, String content) {
         this.chatUserId = chatUserId;
         this.chatDate = chatDate;
         this.content = content;
+    }
+
+    @Override
+    public String toString() {
+        return "ChatMsg{" +
+                "id=" + id +
+                ", chatUserId=" + chatUserId +
+                ", chatDate='" + chatDate + '\'' +
+                ", content='" + content + '\'' +
+                '}';
     }
 }

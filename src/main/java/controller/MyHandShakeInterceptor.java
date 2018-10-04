@@ -6,9 +6,11 @@ import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.WebSocketHandler;
+import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.server.HandshakeInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -19,12 +21,15 @@ import java.util.Map;
  */
 @Component
 public class MyHandShakeInterceptor implements HandshakeInterceptor {
+
+//    private static Map<WebSocketSession,String> map = new HashMap<WebSocketSession, String>();
     @Override
     public boolean beforeHandshake(ServerHttpRequest serverHttpRequest, ServerHttpResponse serverHttpResponse, WebSocketHandler webSocketHandler, Map<String, Object> map) throws Exception {
         if(serverHttpRequest instanceof ServletServerHttpRequest){
             HttpServletRequest servletRequest = ((ServletServerHttpRequest)serverHttpRequest).getServletRequest();
             User user = (User)servletRequest.getSession().getAttribute("user");
             //这里给map赋值 相当于websockethandler的afterConnectionEstablished方法里的WebSocketSession
+            //key是session，value是变量
             map.put("ws_user", user);
             System.out.println(user);
             System.out.println("1");
