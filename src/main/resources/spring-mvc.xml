@@ -34,7 +34,7 @@
 					</list>
 				</property>
 			</bean>
-			<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" ></bean>
+			<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" />
 		</mvc:message-converters>
 	</mvc:annotation-driven>
 
@@ -42,7 +42,7 @@
 	<bean id="viewResolver"
 		  class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix" value="/" />
-		<property name="suffix" value=".jsp"></property>
+		<property name="suffix" value=".jsp"/>
 	</bean>
 	<bean id="multipartResolver"
 		  class="org.springframework.web.multipart.commons.CommonsMultipartResolver">

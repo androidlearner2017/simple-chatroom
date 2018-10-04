@@ -6,7 +6,7 @@ public class ChatMsg {
 
     private int id;
     private int chatUserId;
-    private Timestamp chatDate;
+    private String  chatDate;
     private String content;
 
     public int getId() {
@@ -34,11 +34,17 @@ public class ChatMsg {
         content = content;
     }
 
-    public Timestamp getChatDate() {
+    public String getChatDate() {
         return chatDate;
     }
 
-    public void setChatDate(Timestamp chatDate) {
+    public void setChatDate(String chatDate) {
         this.chatDate = chatDate;
+    }
+
+    public ChatMsg(int chatUserId, String chatDate, String content) {
+        this.chatUserId = chatUserId;
+        this.chatDate = chatDate;
+        this.content = content;
     }
 }

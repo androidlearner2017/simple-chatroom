@@ -44,7 +44,7 @@ public class User {
         return "User{" +
                 "id=" + id +
                 ", userName='" + userName + '\'' +
-                '}';
+                '}'+ registerDate;
     }
 
     public User(String userName, String password) {

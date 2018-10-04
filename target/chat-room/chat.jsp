@@ -15,7 +15,9 @@
 * 服务器发回json实例 {"userName":"chris","sendDate":1494664021793,"content":"hello"}
 -->
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<% String path = request.getContextPath();%>
+<% String path = request.getContextPath();
+    String socketPath = request.getServerName() + ":" + request.getServerPort() + path + "/";
+%>
 <html>
 <head>
     <title>Start chatting now</title>
@@ -34,7 +36,7 @@
         <h1 id="title">chat-room</h1></div>
     <div class="middle">
         <div id="menu">
-            <b>在线人数<span>0</span></b>
+            <b id="pOnline">在线人数<span>0</span></b>
             <br>在线用户<br>
             <p id="tou">欢迎来到聊天室</p>
         </div>
@@ -58,8 +60,8 @@
             <button id="butSent" type="button" class="btn btn-default"
                     onclick="getConnection()">连接
             </button>
-            <button type="button" class="btn btn-default">断开</button>
-            <button type="button" class="btn btn-default">发送</button>
+            <button type="button" class="btn btn-default" onclick="closeConnection()">断开</button>
+            <button type="button" class="btn btn-default" onclick="sendMsg()">发送</button>
         </div>
     </div>
 
@@ -72,41 +74,88 @@
 <script>
 
     var wsServer = null;
-    wsServer = "ws://" + location.host + "${pageContext.request.contextPath}" + "/user/login.do";
+    wsServer = "ws://" + location.host + "${pageContext.request.contextPath}" + "/websocket.do";
     var websocket = null;
-        //打开链接
-        function getConnection() {
-            if (websocket == null) {
-                websocket = new WebSocket(wsServer);
-                websocket.onopen = function (evnt) {
-                    alert("链接服务器成功!")
-                };
-                websocket.onmessage = function (evnt) {
-                    var msg = $("#msg");
-                    msg.html(msg.html() + "<br/>" + evnt.data);
-                };
-                websocket.onerror = function (evnt) {
-                    alert("发生错误，与服务器断开了链接!")
-                };
-                websocket.onclose = function (evnt) {
-                    alert("与服务器断开了链接!")
-                };
-                $('#send').bind('click', function () {
-                    send();
-                });
-            } else {
-                alert("连接已存在!")
-            }
-        }
 
-        function send() {
-            if (websocket != null) {
-                var message = document.getElementById('msgContent').value;
-                websocket.send(message);
-            } else {
-                alert('未与服务器链接.');
-            }
+    websocket.onopen = function (evnt) {
+        alert("链接服务器成功!")
+    };
+    websocket.onmessage = function (evnt) {
+        var msg = $("#msg");
+        msg.html(msg.html() + "<br/>" + evnt.data);
+    };
+    websocket.onerror = function (evnt) {
+        alert("发生错误，与服务器断开了链接!")
+    };
+    websocket.onclose = function (evnt) {
+        alert("与服务器断开了链接!")
+    };
+
+    //打开链接
+    function getConnection() {
+        if (websocket == null) {
+            websocket = new WebSocket(wsServer);
+            websocket.onopen = function (evnt) {
+                alert("链接服务器成功!")
+            };
+            websocket.onmessage = function (evnt) {
+                var msg = $("#msg");
+                msg.html(msg.html() + "<br/>" + evnt.data);
+            };
+            websocket.onerror = function (evnt) {
+                alert("发生错误，与服务器断开了链接!")
+            };
+            websocket.onclose = function (evnt) {
+                alert("与服务器断开了链接!")
+            };
+            $('#send').bind('click', function () {
+                send();
+            });
+        } else {
+            alert("连接已存在!")
         }
+    }
+
+    /**
+     * 关闭连接
+     */
+    function closeConnection(){
+        if(websocket != null){
+            websocket.close();
+            websocket = null;
+            alert("已经关闭连接")
+        }else{
+           alert("未开启连接")
+        }
+    }
+
+   /* function send() {
+        if (websocket != null) {
+            var message = document.getElementById('msgContent').value;
+            websocket.send(message);
+        } else {
+            alert('未与服务器链接.');
+        }
+    }*/
+    /*
+    发送信息给后台
+     */
+    function sendMsg(){
+        var msg = $("#msgContent");
+        if(websocket == null){
+            alert("连接未开启!");
+            return;
+        }
+        var message = msg.val();
+        //输入完成后，清空输入区
+        msg.val("");
+        if(message == null || message == ""){
+            alert("输入不能为空的哦");
+            return;
+        }
+        //向后台MyWebSocketHandler中的handlemessage发送信息
+        websocket.send(message);
+    }
 
 
 </script>
