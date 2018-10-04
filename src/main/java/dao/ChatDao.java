@@ -11,4 +11,7 @@ public interface ChatDao {
     List<ChatMsg> findMsg(String conSearch);
 
     List<ChatMsg> testMsg();
+
+    //这是用来测试级联属性的
+    ChatMsg getMsgUser(Integer id);
 }

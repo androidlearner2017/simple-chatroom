@@ -8,6 +8,7 @@ public class ChatMsg {
     private int chatUserId;
     private String  chatDate;
     private String content;
+    private User user;
 
     public int getId() {
         return id;
@@ -42,6 +43,14 @@ public class ChatMsg {
         this.chatDate = chatDate;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public ChatMsg() {
     }
 
@@ -58,6 +67,7 @@ public class ChatMsg {
         this.content = content;
     }
 
+
     @Override
     public String toString() {
         return "ChatMsg{" +
@@ -65,6 +75,7 @@ public class ChatMsg {
                 ", chatUserId=" + chatUserId +
                 ", chatDate='" + chatDate + '\'' +
                 ", content='" + content + '\'' +
+                ", user=" + user +
                 '}';
     }
 }

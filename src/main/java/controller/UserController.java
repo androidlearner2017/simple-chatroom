@@ -32,6 +32,11 @@ public class UserController {
         return "login";
     }
 
+    @RequestMapping(value = "/register", method = RequestMethod.GET)
+    public String register() {
+        return "register";
+    }
+
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ModelAndView loginUser(String userName, String password, HttpSession session) {
         System.out.println(userName);
@@ -57,7 +62,7 @@ public class UserController {
         user.setPassword(password);
         user.setRegisterData(dateFormat.format(new Date()));
         userService.userRegister(user);
-        modelAndView=new ModelAndView("redirect:login");
+        modelAndView=new ModelAndView("redirect:register");
         return modelAndView;
     }
 }

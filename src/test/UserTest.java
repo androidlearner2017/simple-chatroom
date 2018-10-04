@@ -1,3 +1,4 @@
+import dao.ChatDao;
 import dao.UserDao;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,6 +12,8 @@ import service.UserService;
 public class UserTest {
     @Autowired
     private UserDao userDao;
+    @Autowired
+    private ChatDao chatDao;
 
     @Autowired
     private UserService userService;
@@ -19,5 +22,6 @@ public class UserTest {
     public void test1() {
         System.out.println(userDao.getUser(1));
         System.out.println(userService.getUser(2));
+        System.out.println(chatDao.getMsgUser(1));
     }
 }

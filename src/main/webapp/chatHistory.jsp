@@ -37,7 +37,7 @@
         <c:forEach items="${msgList}" var="msg">
             <tbody>
             <tr>
-                <th>${msg.chatUserId}</th>
+                <th>${msg.user.userName}</th>
                 <th>${msg.chatDate}</th>
                 <th>${msg.content}</th>
             </tr>

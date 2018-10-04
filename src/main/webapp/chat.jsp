@@ -36,7 +36,7 @@
         <h1 id="title">chat-room</h1></div>
     <div class="middle">
         <div id="menu">
-            <b id="pOnline">在线人数<span>0</span></b>
+         <!--   <b id="pOnline">在线人数<span>0</span></b> -->
             <br>在线用户<br>
             <p id="tou">欢迎来到聊天室</p>
         </div>
