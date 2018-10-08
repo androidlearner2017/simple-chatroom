@@ -6,19 +6,7 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="aa3a34a4-f69d-432d-b1a3-2046aedaa19b" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/controller/MyHandShakeInterceptor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/controller/MyHandShakeInterceptor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/controller/MyWebSocketHander.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/controller/MyWebSocketHander.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/chat.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/chat.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/chat-room/WEB-INF/classes/controller/MyHandShakeInterceptor.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/chat-room/WEB-INF/classes/controller/MyHandShakeInterceptor.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/chat-room/WEB-INF/classes/controller/MyWebSocketHander.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/chat-room/WEB-INF/classes/controller/MyWebSocketHander.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/chat-room/WEB-INF/classes/controller/UserController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/chat-room/WEB-INF/classes/controller/UserController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/chat-room/chat.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/chat-room/chat.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/controller/MyHandShakeInterceptor.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/controller/MyHandShakeInterceptor.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/controller/MyWebSocketHander.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/controller/UserController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/controller/UserController.class" afterDir="false" />
-    </list>
+    <list default="true" id="aa3a34a4-f69d-432d-b1a3-2046aedaa19b" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -139,8 +127,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/webapp/chat.jsp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1387">
-              <caret line="100" column="53" lean-forward="true" selection-start-line="100" selection-start-column="53" selection-end-line="100" selection-end-column="53" />
+            <state relative-caret-position="-798">
+              <caret line="36" column="24" lean-forward="true" selection-start-line="36" selection-start-column="24" selection-end-line="36" selection-end-column="24" />
             </state>
           </provider>
         </entry>
@@ -265,7 +253,7 @@
       </MavenImportingSettings>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="15" />
     <option name="y" value="30" />
     <option name="width" value="1890" />
@@ -419,7 +407,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1539006146956" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1539007394444" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../Matrix/轻松搞定JavaWeb聊天室毕设项目" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
@@ -649,7 +637,7 @@
       <workItem from="1538614967658" duration="27765000" />
       <workItem from="1538983157374" duration="3218000" />
       <workItem from="1538986419684" duration="84000" />
-      <workItem from="1538994986557" duration="8639000" />
+      <workItem from="1538994986557" duration="9853000" />
     </task>
     <servers />
   </component>
@@ -686,7 +674,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="134478000" />
+    <option name="totallyTimeSpent" value="135692000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1015,8 +1003,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/webapp/chat.jsp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1387">
-          <caret line="100" column="53" lean-forward="true" selection-start-line="100" selection-start-column="53" selection-end-line="100" selection-end-column="53" />
+        <state relative-caret-position="-798">
+          <caret line="36" column="24" lean-forward="true" selection-start-line="36" selection-start-column="24" selection-end-line="36" selection-end-column="24" />
         </state>
       </provider>
     </entry>
