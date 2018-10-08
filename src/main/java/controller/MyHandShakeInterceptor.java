@@ -32,7 +32,7 @@ public class MyHandShakeInterceptor implements HandshakeInterceptor {
             //key是session，value是变量
             map.put("ws_user", user);
             System.out.println(user);
-            System.out.println("1");
+
         }
         return true;
     }

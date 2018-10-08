@@ -39,6 +39,8 @@
          <!--   <b id="pOnline">在线人数<span>0</span></b> -->
             <br>在线用户<br>
             <p id="tou">欢迎来到聊天室</p>
+            <p id="onlineNum">0</p>
+
         </div>
 
         <div class="chatter" id="chatter">
@@ -78,30 +80,26 @@
     wsServer = "ws://" + location.host + "${pageContext.request.contextPath}" + "/websocket.do";
     var websocket = null;
 
-    websocket.onopen = function (evnt) {
-        alert("链接服务器成功!")
-    };
+
+    //将后台传来的消息显示到前端
     websocket.onmessage = function (evnt) {
+        var message = eval("(" + evnt + ")");
+        alert(message.msgType);
+
         var msg = $("#msg");
         msg.html(msg.html() + "<br/>" + evnt.data);
     };
-    websocket.onerror = function (evnt) {
-        alert("发生错误，与服务器断开了链接!")
-    };
-    websocket.onclose = function (evnt) {
-        alert("与服务器断开了链接!")
-    };
-
     //打开链接
     function getConnection() {
         if (websocket == null) {
             websocket = new WebSocket(wsServer);
             websocket.onopen = function (evnt) {
-                alert("链接服务器成功!")
+                alert("链接服务器成功!");
+              // websocket.send(); open之后会直接到拦截器
             };
             websocket.onmessage = function (evnt) {
-                var msg = $("#msg");
-                msg.html(msg.html() + "<br/>" + evnt.data);
+                var message = eval("(" + evnt + ")");
+                alert(message.msgType);
             };
             websocket.onerror = function (evnt) {
                 alert("发生错误，与服务器断开了链接!")
@@ -130,17 +128,6 @@
         }
     }
 
-   /* function send() {
-        if (websocket != null) {
-            var message = document.getElementById('msgContent').value;
-            websocket.send(message);
-        } else {
-            alert('未与服务器链接.');
-        }
-    }*/
-    /*
-    发送信息给后台
-     */
     function sendMsg(){
         var msg = $("#msgContent");
         if(websocket == null){
