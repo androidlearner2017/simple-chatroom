@@ -19,19 +19,34 @@ import java.util.List;
 
 @Component
 public class MyWebSocketHander implements WebSocketHandler {
-
+    //这里好像是存储sessionID的，所以并没有和我们后端的用户session对应起来
+    //最好不要直接用
     private final static List<WebSocketSession> users = new ArrayList<>();
+    private final static List<User> userOnline = new ArrayList<>();
 
     @Override
     public void afterConnectionEstablished(WebSocketSession webSocketSession) throws Exception {
         users.add(webSocketSession);
+        //每次有新的连接，就加入到user集合中
+        User user = (User)webSocketSession.getAttributes().get("ws_user");
+        userOnline.add(user);
+
+        List<String> userNamelist = new ArrayList<>();
+        for(User u : userOnline){
+            String userName = u.getUserName();
+            userNamelist.add(userName);
+        }
+
         //String类的format()方法用于创建格式化的字符串以及连接多个字符串对象。
-        String messageFormat = "{\"onlineNum\":\"%d\",\"users\":%s , \"msgType" +
-                "\":%s}";
-        String message1 = String.format(messageFormat, users.size(),users ,"notice");
-        TextMessage message2 = new TextMessage(message1 + "");
-        System.out.println(message2);
-        webSocketSession.sendMessage(message2);
+        //这里传到前端的应该是JSON格式
+        String messageFormat = "{onlineNum:\"%d\",userName:\"%s\" , msgTyp :\"%s\"}";
+        String msg = String.format(messageFormat, users.size(),userNamelist ,"notice");
+
+        TextMessage testMsg = new TextMessage(msg + "");
+        //确保每个用户信息都能同步到
+        for(WebSocketSession wss : users) {
+            wss.sendMessage(testMsg);
+        }
     }
     /**
      * 客户端发送服务器的消息时的处理函数，在这里收到消息之后可以分发消息
@@ -53,10 +68,9 @@ public class MyWebSocketHander implements WebSocketHandler {
         ChatMsg chatMsg = new ChatMsg(user.getId(),sentMsgDate,msgContent);
         chatService.addMessage(chatMsg);
 
-        String message = "用户：" + user.getUserName() + "发送时间："+sentMsgDate +  "内容:"+ webSocketMessage.getPayload() + "";
+        String messageFormat = "{user:\"%s\",sendDate:\"%s\" ,sendContent:\"%s\" , msgTyp :\"%s\"}";
+        String message = String.format(messageFormat,user.getUserName(),sentMsgDate,webSocketMessage.getPayload() + "","msg");
         System.out.println(message);
- //       String newMsg = getMessage(message,"msg",users);
-
         TextMessage toMsg = new TextMessage( message + "");
         System.out.println(toMsg);
         //遍历所有的用户，发信息，这个要注意哦，要不然不能做到多人同时聊天

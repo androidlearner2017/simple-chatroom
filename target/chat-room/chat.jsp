@@ -36,15 +36,16 @@
         <h1 id="title">chat-room</h1></div>
     <div class="middle">
         <div id="menu">
-         <!--   <b id="pOnline">在线人数<span>0</span></b> -->
-            <br>在线用户<br>
+            <!--   <b id="pOnline">在线人数<span>0</span></b> -->
             <p id="tou">欢迎来到聊天室</p>
+            <br>在线用户人数<br>
             <p id="onlineNum">0</p>
+            <p>当前在线用户</p>
+            <div id="onlineUser"></div>
 
         </div>
 
         <div class="chatter" id="chatter">
-
             <p id="msg"></p>
 
         </div>
@@ -62,9 +63,16 @@
             <button id="butSent" type="button" class="btn btn-default"
                     onclick="getConnection()">连接
             </button>
-            <button type="button" class="btn btn-default" onclick="closeConnection()">断开</button>
-            <button type="button" class="btn btn-default" onclick="sendMsg()">发送</button>
-            <button type="button" class="btn btn-default" onclick="location.href='http://localhost:8080/chatroom/chatHistory.jsp'">消息记录</button>
+            <button type="button" class="btn btn-default"
+                    onclick="closeConnection()">断开
+            </button>
+            <button type="button" class="btn btn-default" onclick="sendMsg()">
+                发送
+            </button>
+            <button type="button" class="btn btn-default"
+                    onclick="location.href='http://localhost:8080/chatroom/chatHistory.jsp'">
+                消息记录
+            </button>
         </div>
     </div>
 
@@ -79,27 +87,45 @@
     var wsServer = null;
     wsServer = "ws://" + location.host + "${pageContext.request.contextPath}" + "/websocket.do";
     var websocket = null;
-
-
     //将后台传来的消息显示到前端
-    websocket.onmessage = function (evnt) {
-        var message = eval("(" + evnt + ")");
-        alert(message.msgType);
+    /* websocket.onmessage = function (evnt) {
+         var message = eval("(" + evnt.data + ")");
+         if(message.msgTyp === "notice"){
+             $("#onlineNum").text(message.onlineNum);
+         }else if(message.msgTyp === "msg"){
+             showChat(evnt);
+         }
+     };*/
 
+    //从后台接受聊天消息，并展示到前端
+    function showChat(evnt) {
+        var message = eval("(" + evnt.data + ")");
         var msg = $("#msg");
-        msg.html(msg.html() + "<br/>" + evnt.data);
-    };
+        //msg.html是之前的聊天内容，空一行
+        msg.html(msg.html() + "<br/>" + "用户: " + message.user + " 发送时间：" + message.sendDate + "<br/>" + message.sendContent);
+    }
+
     //打开链接
     function getConnection() {
         if (websocket == null) {
             websocket = new WebSocket(wsServer);
             websocket.onopen = function (evnt) {
                 alert("链接服务器成功!");
-              // websocket.send(); open之后会直接到拦截器
             };
             websocket.onmessage = function (evnt) {
-                var message = eval("(" + evnt + ")");
-                alert(message.msgType);
+                var onlineUser = $("#onlineUser");
+                var message = eval("(" + evnt.data + ")");
+                //显示在线人数及在线用户
+                if (message.msgTyp === "notice") {
+                    var htmlOnline ;
+                    $("#onlineNum").text(message.onlineNum);
+                    htmlOnline ="<p> "+ message.userName +" </p>";
+                    //实时更新在线用户
+                    onlineUser.html("");
+                    $(onlineUser).append(htmlOnline );
+                } else if (message.msgTyp === "msg") {
+                    showChat(evnt);
+                }
             };
             websocket.onerror = function (evnt) {
                 alert("发生错误，与服务器断开了链接!")
@@ -118,26 +144,26 @@
     /**
      * 关闭连接
      */
-    function closeConnection(){
-        if(websocket != null){
+    function closeConnection() {
+        if (websocket != null) {
             websocket.close();
             websocket = null;
             alert("已经关闭连接")
-        }else{
-           alert("未开启连接")
+        } else {
+            alert("未开启连接")
         }
     }
 
-    function sendMsg(){
+    function sendMsg() {
         var msg = $("#msgContent");
-        if(websocket == null){
+        if (websocket == null) {
             alert("连接未开启!");
             return;
         }
         var message = msg.val();
         //输入完成后，清空输入区
         msg.val("");
-        if(message == null || message == ""){
+        if (message == null || message == "") {
             alert("输入不能为空的哦");
             return;
         }
