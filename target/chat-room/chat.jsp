@@ -50,8 +50,6 @@
 
         </div>
     </div>
-
-
     <div id="content">
         <textarea class="form-control" rows="3" placeholder="我想说....."
                   id="msgContent">
@@ -64,10 +62,23 @@
                     onclick="getConnection()">连接
             </button>
             <button type="button" class="btn btn-default"
-                    onclick="closeConnection()">断开
+                    onclick="sendMsgClose()">断开
             </button>
             <button type="button" class="btn btn-default" onclick="sendMsg()">
                 发送
+            </button>
+            <button type="button" class="btn btn-default" onclick="clearMsg()">
+                清屏
+            </button>
+            <button type="button" class="btn btn-default" data-toggle="modal"
+                    data-target="#imgModal">
+                上传图片
+            </button>
+            <input type="file" name="userImage" id="userImage1"
+                   onchange="check()" placeholder="请选择要上传的图片">
+            <button type="button" class="btn btn-default"
+                    onclick="sendImg()">
+                发送图片
             </button>
             <button type="button" class="btn btn-default"
                     onclick="location.href='http://localhost:8080/chatroom/chatHistory.jsp'">
@@ -79,7 +90,32 @@
     <div id="footer">
         Designed by Annie
     </div>
-
+</div>
+<!-- 一下是bootstrap的模态框-->
+<%--<div class="modal fade" id="imgModal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">
+                    &times;
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <input type="file" name="userImage" id="userImage"
+                           onchange="check()" placeholder="请选择要上传的图片"><br/>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default"
+                        onclick="sendImg()">
+                    发送图片
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->--%>
 </div>
 </body>
 <script>
@@ -117,14 +153,19 @@
                 var message = eval("(" + evnt.data + ")");
                 //显示在线人数及在线用户
                 if (message.msgTyp === "notice") {
-                    var htmlOnline ;
+                    var htmlOnline;
                     $("#onlineNum").text(message.onlineNum);
-                    htmlOnline ="<p> "+ message.userName +" </p>";
+                    htmlOnline = "<p> " + message.userName + " </p>";
                     //实时更新在线用户
                     onlineUser.html("");
-                    $(onlineUser).append(htmlOnline );
+                    $(onlineUser).append(htmlOnline);
                 } else if (message.msgTyp === "msg") {
                     showChat(evnt);
+                } else if (message.msgTyp === "exit") {
+                    $("#onlineNum").text(message.onlineNum);
+                    var msg = $("#msg");
+                    //msg.html是之前的聊天内容，空一行
+                    msg.html(msg.html() + "<br/>" + "用户: " + message.userName + "退出聊天");
                 }
             };
             websocket.onerror = function (evnt) {
@@ -154,6 +195,58 @@
         }
     }
 
+    function sendMsgClose() {
+        var closeMsg = "${user.userName}";
+        websocket.send(JSON.stringify({
+            message: closeMsg,
+            type: "exit"
+        }));
+        websocket.onmessage = function (evnt) {
+            var onlineUser = $("#onlineUser");
+            var message = eval("(" + evnt.data + ")");
+            //显示在线人数及在线用户
+            if (message.msgTyp === "exit") {
+                $("#onlineNum").text(message.onlineNum);
+                var msg = $("#msg");
+                //msg.html是之前的聊天内容，空一行
+                msg.html(msg.html() + "<br/>" + "用户: " + message.userName + "退出聊天");
+                htmlOnline = "<p> " + message.userNameList + " </p>";
+                onlineUser.html("");
+                $(onlineUser).append(htmlOnline);
+                //我之前是把这个函数放到下面的，但是js是异步操作，意味着它会先过一遍主函数再过枝干
+                //而closeConnection()放到下面的话，就会先注册onmessage但是不调用，直接调到closeConnection然后
+                //等电脑有空了再来调用里面的代码。
+                closeConnection();
+            }
+        }
+        //就是这里 closeConnection();
+    }
+
+    /*
+        上传图片信息，传到后台+后台读取数据
+     */
+    function sendImg() {
+        var inputElement = document.getElementById("userImage1");
+        var fileList = inputElement.files;
+        var file = fileList[0];
+        if (!file) return;
+        var reader = new FileReader();
+        //以二进制形式读取文件
+        reader.readAsArrayBuffer(file);
+        //文件读取完毕后该函数响应
+        reader.onload = function loaded() {
+            var blob = document.getElementById("userImage1").files[0];
+            //发送二进制表示的文件
+            websocket.send(JSON.stringify({
+                message: blob,
+                filename: file.name,
+                type: "img"
+            }));
+            inputElement.outerHTML = inputElement.outerHTML; //清空<input type="file">的值
+        }
+    }
+
+
     function sendMsg() {
         var msg = $("#msgContent");
         if (websocket == null) {
@@ -163,14 +256,21 @@
         var message = msg.val();
         //输入完成后，清空输入区
         msg.val("");
-        if (message == null || message == "") {
+        if (message == null || message === "") {
             alert("输入不能为空的哦");
             return;
         }
         //向后台MyWebSocketHandler中的handlemessage发送信息
-        websocket.send(message);
+        websocket.send(JSON.stringify({
+            message: message,
+            type: "chatMsg"
+        }));
     }
 
+    //清屏函数
+    function clearMsg() {
+        $("#chatter").html("");
+    }
 
 </script>
 
