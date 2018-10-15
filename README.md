@@ -10,3 +10,5 @@ ssm + websocket
 （2）多人在线聊天
 （3）显示在线用户名称及在线人数
 （4）查看聊天记录
+https://blog.csdn.net/Annie201799/article/details/82779115
+具体信息传递方式可参考我的博客
